@@ -18,8 +18,24 @@ contract SDUFECoin is ERC20, Ownable {
     {}
 
     function mintTo(address recipient) public payable {
-        if (msg.value < MAX_SUPPLY) {
+        if (msg.value < MINT_PRICE) {
             revert NoPayMintPrice();
+        } else {
+            uint256 amount = msg.value / MINT_PRICE;
+            uint256 nowAmount = totalSupply + amount;
+            if (nowAmount <= MAX_SUPPLY) {
+                _mint(recipient, amount);
+            } else {
+                revert MaxSupply();
+            }
+        }
+    }
+
+    function withdrawPayments(address payable payee) external onlyOwner {
+        uint256 balance = address(this).balance;
+        (bool transferTx,) = payee.call{value: balance}("");
+        if (!transferTx) {
+            revert WithdrawTransfer();
         }
     }
 }
