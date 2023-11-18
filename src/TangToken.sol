@@ -15,7 +15,6 @@ contract TangToken is ERC20, Ownable {
     constructor(string memory _name, string memory _symbol, uint8 _decimals, address _initOwner)
         ERC20(_name, _symbol, _decimals)
         Ownable(_initOwner)
-    {}
 
     function mintTo(address recipient) public payable {}
 }
