@@ -8,13 +8,13 @@ error NoPayMintPrice();
 error WithdrawTransfer();
 error MaxSupply();
 
-contract SDUFECoin is ERC20, Ownable {
+contract TangToken is ERC20, Ownable {
     uint256 public constant MINT_PRICE = 0.00000001 ether;
     uint256 public constant MAX_SUPPLY = 1_000_000_000;
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimals, address _initOwner)
+    constructor(string memory _name, string memory _symbol, uint8 _decimals)
         ERC20(_name, _symbol, _decimals)
-        Ownable(_initOwner)
+        Ownable(msg.sender)
     {}
 
     function mintTo(address recipient) public payable {
