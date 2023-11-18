@@ -9,7 +9,7 @@ error WithdrawTransfer();
 error MaxSupply();
 
 contract TangToken is ERC20, Ownable {
-    uint256 public constant MINT_PRICE = 0.00000001 ether;
+    uint256 public constant MINT_PRICE = 0.0000001 ether;
     uint256 public constant MAX_SUPPLY = 1_000_000_000;
 
     constructor(string memory _name, string memory _symbol, uint8 _decimals)
