@@ -8,6 +8,8 @@ contract TangTokenScript is Script {
     function setUp() public {}
 
     function run() external {
-        
+        vm.startBroadcast();
+        TangToken token = new TangToken("TangToken","Tang",8);
+        vm.stopBroadcast();
     }
 }
