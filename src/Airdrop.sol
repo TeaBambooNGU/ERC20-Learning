@@ -23,6 +23,16 @@ contract Airdrop is ERC20 {
         uint256[] calldata _amounts) external {
             // 校验代币地址的数据 和 转账金额的数据 长度是否相等
             require(_addresses.length == _amounts.length,"Lengths of Addresses and Amounts NOT SAME");
+            IERC20 token = IERC20(_token);
+            uint _amountSum = getSum(_amounts);
+            // 授权代币数量要大于转出代币数量
+            require(token.allowance(msg.sender,address(this)) > _amountSum, "Need Approve ERC20 token");
+
+            for (uint i = 0; i < _addresses.length; i++) {
+                token.transferFrom(msg.sender,_addresses[i],_amounts[i]);
+            }
+
+
 
         }
     
