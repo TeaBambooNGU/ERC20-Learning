@@ -25,9 +25,10 @@ contract Airdrop is ERC20 {
             require(_addresses.length == _amounts.length,"Lengths of Addresses and Amounts NOT SAME");
             IERC20 token = IERC20(_token);
             uint _amountSum = getSum(_amounts);
-            // 授权代币数量要大于转出代币数量
+            // 授权代币数量要大于转出代币数量 (接口调用者授权给这个合约的代币数量不能大于发行量)
+            // 本身是这个合约调用的转账请求
             require(token.allowance(msg.sender,address(this)) > _amountSum, "Need Approve ERC20 token");
-
+            // 本身是这个合约调用的转账请求 所以这个接口调用的时候 在ERC20内部的msg.sender是这个合约的地址而不是传入的这个msg.sender
             for (uint i = 0; i < _addresses.length; i++) {
                 token.transferFrom(msg.sender,_addresses[i],_amounts[i]);
             }
