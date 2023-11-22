@@ -32,9 +32,6 @@ contract Airdrop is ERC20 {
             for (uint i = 0; i < _addresses.length; i++) {
                 token.transferFrom(msg.sender,_addresses[i],_amounts[i]);
             }
-
-
-
         }
     
 }
