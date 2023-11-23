@@ -2,9 +2,12 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
+event no_enough_allowance(uint256 amount, address owner, address spender);
 contract Airdrop is ERC20 {
-    constructor(string memory _name, string memory _symbol) ERC20(_name,_symbol) {}
+    address public contractAddress;
+    constructor(string memory _name, string memory _symbol) ERC20(_name,_symbol) {
+        contractAddress = address(this);
+    }
 
     function getSum(uint256[] calldata _arr) public pure returns (uint sum) {
         for(uint i=0; i<_arr.length; i++){
@@ -25,8 +28,11 @@ contract Airdrop is ERC20 {
             require(_addresses.length == _amounts.length,"Lengths of Addresses and Amounts NOT SAME");
             IERC20 token = IERC20(_token);
             uint _amountSum = getSum(_amounts);
+            if(token.allowance(msg.sender,address(this)) <= _amountSum){
+                emit no_enough_allowance(token.allowance(msg.sender,address(this)),msg.sender, address(this));
+
+            }
             // 授权代币数量要大于转出代币数量 (接口调用者授权给这个合约的代币数量不能大于发行量)
-            // 本身是这个合约调用的转账请求
             require(token.allowance(msg.sender,address(this)) > _amountSum, "Need Approve ERC20 token");
             // 本身是这个合约调用的转账请求 所以这个接口调用的时候 在ERC20内部的msg.sender是这个合约的地址而不是传入的这个msg.sender
             for (uint i = 0; i < _addresses.length; i++) {
